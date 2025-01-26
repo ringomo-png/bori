@@ -208,7 +208,7 @@
 <body>
 
     <div class="form-container">
-        <div class="results">
+        <div class="results" id="resultsContainer">
             <div class="icon">B</div>
             <p class="main-cost">1人あたり: <span id="costPerPerson">0</span> 円</p>
         </div>
@@ -293,7 +293,64 @@
     </div>
 
     <script>
-        // 以下、JavaScriptの内容はそのまま
+        function syncOutwardToReturn(input, fieldType) {
+            const returnSection1 = document.querySelector(`#returnSections .section:nth-child(1) .${fieldType}`);
+            returnSection1.value = input.value;
+        }
+
+        function calculateTotal() {
+            const fuelEfficiency = parseFloat(document.getElementById("fuelEfficiency").value);
+            const fuelPrice = parseFloat(document.getElementById("fuelPrice").value);
+            const numPeople = parseInt(document.getElementById("numPeople").value);
+            const otherCost = parseFloat(document.getElementById("otherCost").value || 0);
+
+            let totalDistance = 0;
+            let totalTollFee = 0;
+
+            document.querySelectorAll(".distance").forEach(input => {
+                totalDistance += parseFloat(input.value || 0);
+            });
+
+            document.querySelectorAll(".tollFee").forEach(input => {
+                totalTollFee += parseFloat(input.value || 0);
+            });
+
+            const fuelCost = (totalDistance / fuelEfficiency) * fuelPrice;
+            const totalCost = fuelCost + totalTollFee + otherCost;
+            const costPerPerson = totalCost / numPeople;
+
+            document.getElementById("costPerPerson").innerText = formatWithCommas(costPerPerson.toFixed(0));
+
+            // スクロール処理
+            const resultsContainer = document.getElementById("resultsContainer");
+            resultsContainer.scrollIntoView({ behavior: "smooth" });
+        }
+
+        function addSection(sectionId) {
+            const sectionContainer = document.getElementById(sectionId);
+            const sectionDiv = document.createElement("div");
+            sectionDiv.className = "section";
+            sectionDiv.innerHTML = `
+                <label>区間 ${sectionContainer.children.length + 1} 距離 (km): 
+                    <input type="number" class="distance" placeholder="例: 50">
+                </label>
+                <label>高速料金 (円): 
+                    <input type="number" class="tollFee" step="10" placeholder="例: 500">
+                </label>
+            `;
+            sectionContainer.appendChild(sectionDiv);
+        }
+
+        function removeLastSection(sectionId) {
+            const sectionContainer = document.getElementById(sectionId);
+            if (sectionContainer.children.length > 1) {
+                sectionContainer.removeChild(sectionContainer.lastChild);
+            }
+        }
+
+        function formatWithCommas(number) {
+            return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
     </script>
 </body>
 </html>
