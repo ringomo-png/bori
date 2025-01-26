@@ -61,12 +61,10 @@
             display: flex;
             justify-content: space-between;
             gap: 20px;
-            flex-wrap: wrap;
         }
 
         .section-group {
             flex: 1;
-            min-width: 300px;
         }
 
         .section-group h2 {
@@ -87,19 +85,19 @@
         .section label {
             display: flex;
             justify-content: space-between;
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: #333;
         }
 
         .section input {
-            width: 50px;
-            padding: 4px;
+            width: 60px;
+            padding: 6px;
             margin-left: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #fff;
             color: #333;
-            font-size: 0.9rem;
+            font-size: 1rem;
             text-align: right;
         }
 
@@ -126,17 +124,14 @@
 
         .info-container {
             display: flex;
-            flex-wrap: wrap;
             justify-content: space-between;
             margin-top: 20px;
             padding: 10px 0;
-            gap: 20px;
         }
 
         .info-group {
             text-align: center;
             flex: 1;
-            min-width: 150px;
         }
 
         .info-group label {
@@ -147,8 +142,8 @@
         }
 
         .info-group input {
-            width: 60px;
-            padding: 4px;
+            width: 80px;
+            padding: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #fff;
@@ -205,10 +200,10 @@
                         </div>
                         <div class="section">
                             <label>区間 2 距離 (km): 
-                                <input type="number" class="distance" placeholder="例: 50">
+                                <input type="number" class="distance" placeholder="例: 50" oninput="syncOutwardToReturn(this, 'distance')">
                             </label>
                             <label>高速料金 (円): 
-                                <input type="number" class="tollFee" step="10" placeholder="例: 500">
+                                <input type="number" class="tollFee" step="10" placeholder="例: 500" oninput="syncOutwardToReturn(this, 'tollFee')">
                             </label>
                         </div>
                     </div>
@@ -250,7 +245,7 @@
                     <input type="number" id="fuelEfficiency" value="15" required>
                 </div>
                 <div class="info-group">
-                    <label>ガス代 (円/L)</label>
+                    <label>ガソリン代 (円/L)</label>
                     <input type="number" id="fuelPrice" value="145" required>
                 </div>
                 <div class="info-group">
@@ -268,26 +263,9 @@
     </div>
 
     <script>
-        function addSection(sectionId) {
-            const sectionContainer = document.getElementById(sectionId);
-            const sectionDiv = document.createElement("div");
-            sectionDiv.className = "section";
-            sectionDiv.innerHTML = `
-                <label>区間 ${sectionContainer.children.length + 1} 距離 (km): 
-                    <input type="number" class="distance" placeholder="例: 50">
-                </label>
-                <label>高速料金 (円): 
-                    <input type="number" class="tollFee" step="10" placeholder="例: 500">
-                </label>
-            `;
-            sectionContainer.appendChild(sectionDiv);
-        }
-
-        function removeLastSection(sectionId) {
-            const sectionContainer = document.getElementById(sectionId);
-            if (sectionContainer.children.length > 1) {
-                sectionContainer.removeChild(sectionContainer.lastChild);
-            }
+        function syncOutwardToReturn(input, fieldType) {
+            const returnSection1 = document.querySelector(`#returnSections .section:nth-child(1) .${fieldType}`);
+            returnSection1.value = input.value;
         }
 
         function calculateTotal() {
@@ -311,8 +289,33 @@
             const totalCost = fuelCost + totalTollFee + otherCost;
             const costPerPerson = totalCost / numPeople;
 
-            // 三桁区切りのフォーマット
-            document.getElementById("costPerPerson").innerText = costPerPerson.toFixed(0).toLocaleString();
+            document.getElementById("costPerPerson").innerText = formatWithCommas(costPerPerson.toFixed(0));
+        }
+
+        function addSection(sectionId) {
+            const sectionContainer = document.getElementById(sectionId);
+            const sectionDiv = document.createElement("div");
+            sectionDiv.className = "section";
+            sectionDiv.innerHTML = `
+                <label>区間 ${sectionContainer.children.length + 1} 距離 (km): 
+                    <input type="number" class="distance" placeholder="例: 50">
+                </label>
+                <label>高速料金 (円): 
+                    <input type="number" class="tollFee" step="10" placeholder="例: 500">
+                </label>
+            `;
+            sectionContainer.appendChild(sectionDiv);
+        }
+
+        function removeLastSection(sectionId) {
+            const sectionContainer = document.getElementById(sectionId);
+            if (sectionContainer.children.length > 1) {
+                sectionContainer.removeChild(sectionContainer.lastChild);
+            }
+        }
+
+        function formatWithCommas(number) {
+            return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
     </script>
 </body>
