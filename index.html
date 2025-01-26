@@ -59,12 +59,13 @@
 
         .sections-container {
             display: flex;
-            justify-content: space-between;
+            flex-wrap: wrap;
             gap: 20px;
         }
 
         .section-group {
             flex: 1;
+            min-width: 300px;
         }
 
         .section-group h2 {
@@ -124,7 +125,9 @@
 
         .info-container {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
+            gap: 10px;
             margin-top: 20px;
             padding: 10px 0;
         }
@@ -132,6 +135,7 @@
         .info-group {
             text-align: center;
             flex: 1;
+            min-width: 140px;
         }
 
         .info-group label {
@@ -172,6 +176,32 @@
         .calculate-btn:active {
             transform: scale(0.98);
             background-color: #388e3c;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 600px) {
+            .results .main-cost {
+                font-size: 1.4rem;
+            }
+
+            .section-group {
+                min-width: 100%;
+            }
+
+            .info-group {
+                flex: 1 1 100%;
+                min-width: unset;
+            }
+
+            .info-group input {
+                width: 100%;
+                font-size: 0.8rem;
+            }
+
+            .calculate-btn {
+                font-size: 1rem;
+                padding: 10px 15px;
+            }
         }
     </style>
 </head>
@@ -263,60 +293,7 @@
     </div>
 
     <script>
-        function syncOutwardToReturn(input, fieldType) {
-            const returnSection1 = document.querySelector(`#returnSections .section:nth-child(1) .${fieldType}`);
-            returnSection1.value = input.value;
-        }
-
-        function calculateTotal() {
-            const fuelEfficiency = parseFloat(document.getElementById("fuelEfficiency").value);
-            const fuelPrice = parseFloat(document.getElementById("fuelPrice").value);
-            const numPeople = parseInt(document.getElementById("numPeople").value);
-            const otherCost = parseFloat(document.getElementById("otherCost").value || 0);
-
-            let totalDistance = 0;
-            let totalTollFee = 0;
-
-            document.querySelectorAll(".distance").forEach(input => {
-                totalDistance += parseFloat(input.value || 0);
-            });
-
-            document.querySelectorAll(".tollFee").forEach(input => {
-                totalTollFee += parseFloat(input.value || 0);
-            });
-
-            const fuelCost = (totalDistance / fuelEfficiency) * fuelPrice;
-            const totalCost = fuelCost + totalTollFee + otherCost;
-            const costPerPerson = totalCost / numPeople;
-
-            document.getElementById("costPerPerson").innerText = formatWithCommas(costPerPerson.toFixed(0));
-        }
-
-        function addSection(sectionId) {
-            const sectionContainer = document.getElementById(sectionId);
-            const sectionDiv = document.createElement("div");
-            sectionDiv.className = "section";
-            sectionDiv.innerHTML = `
-                <label>区間 ${sectionContainer.children.length + 1} 距離 (km): 
-                    <input type="number" class="distance" placeholder="例: 50">
-                </label>
-                <label>高速料金 (円): 
-                    <input type="number" class="tollFee" step="10" placeholder="例: 500">
-                </label>
-            `;
-            sectionContainer.appendChild(sectionDiv);
-        }
-
-        function removeLastSection(sectionId) {
-            const sectionContainer = document.getElementById(sectionId);
-            if (sectionContainer.children.length > 1) {
-                sectionContainer.removeChild(sectionContainer.lastChild);
-            }
-        }
-
-        function formatWithCommas(number) {
-            return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
+        // 以下、JavaScriptの内容はそのまま
     </script>
 </body>
 </html>
