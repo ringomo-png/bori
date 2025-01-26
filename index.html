@@ -87,19 +87,19 @@
         .section label {
             display: flex;
             justify-content: space-between;
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #333;
         }
 
         .section input {
-            width: 80px;
-            padding: 6px;
+            width: 50px;
+            padding: 4px;
             margin-left: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #fff;
             color: #333;
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-align: right;
         }
 
@@ -147,8 +147,8 @@
         }
 
         .info-group input {
-            width: 100%;
-            padding: 5px;
+            width: 60px;
+            padding: 4px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #fff;
@@ -177,49 +177,6 @@
         .calculate-btn:active {
             transform: scale(0.98);
             background-color: #388e3c;
-        }
-
-        @media (max-width: 768px) {
-            .results .main-cost {
-                font-size: 1.4rem;
-            }
-
-            .section-group h2 {
-                font-size: 1.2rem;
-            }
-
-            .section input {
-                width: 100px;
-            }
-
-            .info-group input {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .section-group {
-                min-width: 100%;
-            }
-
-            .section label {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-
-            .section input {
-                width: 100%;
-            }
-
-            .info-group input {
-                width: 100%;
-            }
-
-            .calculate-btn {
-                font-size: 1rem;
-                padding: 10px;
-            }
         }
     </style>
 </head>
@@ -354,7 +311,8 @@
             const totalCost = fuelCost + totalTollFee + otherCost;
             const costPerPerson = totalCost / numPeople;
 
-            document.getElementById("costPerPerson").innerText = costPerPerson.toFixed(0);
+            // 三桁区切りのフォーマット
+            document.getElementById("costPerPerson").innerText = costPerPerson.toFixed(0).toLocaleString();
         }
     </script>
 </body>
