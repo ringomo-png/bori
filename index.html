@@ -288,7 +288,7 @@
                 </div>
             </div>
 
-            <button type="button" class="calculate-btn" onclick="calculateTotal()">計算する</button>
+            <button type="button" class="calculate-btn" onclick="handleCalculate()">計算する</button>
         </form>
     </div>
 
@@ -320,8 +320,21 @@
             const costPerPerson = totalCost / numPeople;
 
             document.getElementById("costPerPerson").innerText = formatWithCommas(costPerPerson.toFixed(0));
+        }
 
-            // スクロール処理
+        function handleCalculate() {
+            const button = document.querySelector(".calculate-btn");
+
+            // クリック感を追加
+            button.style.transform = "scale(0.98)";
+            setTimeout(() => {
+                button.style.transform = "scale(1)";
+            }, 150);
+
+            // 計算実行
+            calculateTotal();
+
+            // 結果表示までスクロール
             const resultsContainer = document.getElementById("resultsContainer");
             resultsContainer.scrollIntoView({ behavior: "smooth" });
         }
